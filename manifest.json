@@ -1,0 +1,26 @@
+{
+    "manifest_version": 3,
+    "name": "Fingerprint sweep",
+    "version": "1.0",
+    "description": "Spoof data that is used to create a cookie-less fingerprint",
+    "permissions": ["storage"],
+    "host_permissions": ["*://*/*"],
+    "action": {
+      "default_popup": "popup/popup.html",
+      "default_icon":{
+        "16": "icons/icon.png",
+        "48": "icons/icon.png",
+        "128": "icons/icon.png"
+      }
+    },
+    "background": {
+      "service_worker": "background.js"
+    },
+    "content_scripts": [
+      {
+        "matches": ["*://*/*"],
+        "js": ["content.js"]
+      }
+    ]
+  }
+  

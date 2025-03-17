@@ -1,0 +1,47 @@
+
+** Navigator data **
+
+GENERAL BROWSER INFO & OS INFORMATION
+
+userAgent
+appVersion
+platform
+language
+languages
+
+
+DEVICE & HARDWARE INFORMATION
+
+hardwareConcurrency (number of CPU cores)
+devicememory        (Approx RAM in GB)
+maxTouchPoints      (Max number of simultaneous touch contact points supported)
+
+
+
+NETWORK & CONNECTION INFORMATION
+
+onLine                      (is browser online)
+connection.effectiveType    (connection type. 4g,...)
+connection.downlink         (approx download speed in Mbps)
+connection.rtt              (estimated rtt in ms)
+
+
+
+SECURITY & PRIVACY FEATURES
+
+cookieEnabled            
+doNotTrack
+geolocation
+
+
+
+BROWSER FEATURES & CAPABILITIES
+
+webdriver            (is browser automated)
+pdfViewerEnabled     
+product              (browser engine)
+
+
+MEDIA & INPUT DEVICES
+
+mediaDevices.enumerateDevices() #async   
