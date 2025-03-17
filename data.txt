@@ -13,7 +13,7 @@ languages
 DEVICE & HARDWARE INFORMATION
 
 hardwareConcurrency (number of CPU cores)
-devicememory        (Approx RAM in GB)
+deviceMemory        (Approx RAM in GB)
 maxTouchPoints      (Max number of simultaneous touch contact points supported)
 
 

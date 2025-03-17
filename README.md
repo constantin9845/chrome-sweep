@@ -1,5 +1,10 @@
 # To Do
 
+- Certain navigator values are read-only -> poss solutions:
+
+-- proxy: intercept requests for these values
+-- modify somehow
+
 ## Spoof Navigator Data
 
 

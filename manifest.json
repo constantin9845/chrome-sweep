@@ -3,8 +3,8 @@
     "name": "Fingerprint sweep",
     "version": "1.0",
     "description": "Spoof data that is used to create a cookie-less fingerprint",
-    "permissions": ["storage"],
-    "host_permissions": ["*://*/*"],
+    "permissions": ["storage", "activeTab"],
+    "host_permissions": ["<all_urls>"],
     "action": {
       "default_popup": "popup/popup.html",
       "default_icon":{
