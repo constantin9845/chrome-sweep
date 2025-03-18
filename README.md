@@ -1,16 +1,13 @@
 # To Do
 
-- Certain navigator values are read-only -> poss solutions:
 
--- proxy: intercept requests for these values
--- modify somehow
-
-## Spoof Navigator Data
+- currently Geo location not changed -> block by default?
 
 
 ## List all data a website is trying to collect
 
-Proxy
+
+## Let user set own navigator values
 
 
 ## Spoof / counter fingerprints collected with dynamic rendering (canvas,...)

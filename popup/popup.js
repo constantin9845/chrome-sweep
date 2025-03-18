@@ -215,7 +215,7 @@ const data = {
         cookieEnabled:{
             data:[true, false]
         },
-        doNotTrace:{
+        doNotTrack:{
             data:[true, false]
         },
         geoLocation:{
@@ -290,13 +290,17 @@ const data = {
 }
 
 
-document.getElementById("clickMe").addEventListener("click", async () => {
+document.getElementById("generate").addEventListener("click", async () => {
 
-    generateNewData();
+    clearDisplay();
+
+    await generateNewData();
 
 });
 
-document.getElementById("data").addEventListener("click", async () => {
+document.getElementById("get_data").addEventListener("click", async () => {
+
+    clearDisplay();
 
     await getCurrentData();
 
@@ -306,71 +310,115 @@ document.getElementById("data").addEventListener("click", async () => {
 
 
 
-function generateNewData(){
+async function generateNewData(){
 
     // GENERAL
-    Object.defineProperty(navigator, "userAgent", { get: () => data['General']['userAgent']['data'][Math.floor(Math.random() * 15)] });
-    Object.defineProperty(navigator, "appVersion", { get: () => data['General']['appVersion']['data'][Math.floor(Math.random() * 15)] });
-    Object.defineProperty(navigator, "platform", { get: () => data['General']['platform']['data'][Math.floor(Math.random() * 15)] });
-    Object.defineProperty(navigator, "language", { get: () => data['General']['language']['data'][Math.floor(Math.random() * 15)] });
-    Object.defineProperty(navigator, "languages", { get: () => data['General']['languages']['data'][Math.floor(Math.random() * 15)] });
+    Object.defineProperty(navigator, "userAgent", { value: data['General']['userAgent']['data'][Math.floor(Math.random() * 15)], configurable:true });
+    Object.defineProperty(navigator, "appVersion", { value: data['General']['appVersion']['data'][Math.floor(Math.random() * 15)], configurable:true });
+    Object.defineProperty(navigator, "platform", { value: data['General']['platform']['data'][Math.floor(Math.random() * 15)], configurable:true });
+    Object.defineProperty(navigator, "language", { value: data['General']['language']['data'][Math.floor(Math.random() * 15)], configurable:true });
+    Object.defineProperty(navigator, "languages", { value: data['General']['languages']['data'][Math.floor(Math.random() * 15)], configurable:true });
     
     // DEVICE & HARDWARE
-    Object.defineProperty(navigator, "hardwareConcurrency", { get: () => data['Device']['hardwareConcurrency']['data'][Math.floor(Math.random() * 15)] });
-    Object.defineProperty(navigator, "deviceMemory", { get: () => data['Device']['deviceMemory']['data'][Math.floor(Math.random() * 15)] });
-    Object.defineProperty(navigator, "maxTouchPoints", { get: () => data['Device']['maxTouchPoints']['data'][Math.floor(Math.random() * 15)] });
+    Object.defineProperty(navigator, "hardwareConcurrency", { value: data['Device']['hardwareConcurrency']['data'][Math.floor(Math.random() * 15)], configurable:true });
+    Object.defineProperty(navigator, "deviceMemory", { value: data['Device']['deviceMemory']['data'][Math.floor(Math.random() * 15)], configurable:true });
+    Object.defineProperty(navigator, "maxTouchPoints", { value: data['Device']['maxTouchPoints']['data'][Math.floor(Math.random() * 15)], configurable:true });
 
     // NETWORK
-    Object.defineProperty(navigator, "onLine", { get: () => data['Network']['onLine']['data'][Math.floor(Math.random() * 2)] });
-    Object.defineProperty(navigator.connection, "effectiveType", { get: () => data['Network']['effectiveType']['data'][Math.floor(Math.random() * 15)] });
-    Object.defineProperty(navigator.connection, "downlink", { get: () => data['Network']['downlink']['data'][Math.floor(Math.random() * 15)] });
-    Object.defineProperty(navigator.connection, "rtt", { get: () => data['Network']['rtt']['data'][Math.floor(Math.random() * 15)] });
+    Object.defineProperty(navigator, "onLine", { value: data['Network']['onLine']['data'][Math.floor(Math.random() * 2)], configurable:true });
+    Object.defineProperty(navigator.connection, "effectiveType", { value: data['Network']['effectiveType']['data'][Math.floor(Math.random() * 15)], configurable:true });
+    Object.defineProperty(navigator.connection, "downlink", { value: data['Network']['downlink']['data'][Math.floor(Math.random() * 15)], configurable:true });
+    Object.defineProperty(navigator.connection, "rtt", { value: data['Network']['rtt']['data'][Math.floor(Math.random() * 15)], configurable:true });
 
     // SECURITY
-    Object.defineProperty(navigator, "cookieEnabled", { get: () => data['Security']['cookieEnabled']['data'][1] });
-    Object.defineProperty(navigator, "doNotTrace", { get: () => data['Security']['doNotTrace']['data'][0] });
-    Object.defineProperty(navigator, "geoLocation", { get: () => data['Security']['geoLocation']['data'][Math.floor(Math.random() * 15)] });
+    Object.defineProperty(navigator, "cookieEnabled", { value: data['Security']['cookieEnabled']['data'][1], configurable:true });
+    Object.defineProperty(navigator, "doNotTrack", { value: data['Security']['doNotTrack']['data'][0], configurable:true });
 
     // FEATURES & CAPABILITIES
-    Object.defineProperty(navigator, "webdriver", { get: () => data['Capabilities']['webDriver']['data'][Math.floor(Math.random() * 2)] });
-    Object.defineProperty(navigator, "pdfViewerEnabled", { get: () => data['Capabilities']['pdfViewerEnabled']['data'][Math.floor(Math.random() * 2)] });
-    Object.defineProperty(navigator, "product", { get: () => data['Capabilities']['product']['data'][Math.floor(Math.random() * 15)] });
+    Object.defineProperty(navigator, "webdriver", { value: data['Capabilities']['webDriver']['data'][Math.floor(Math.random() * 2)], configurable:true });
+    Object.defineProperty(navigator, "pdfViewerEnabled", { value: data['Capabilities']['pdfViewerEnabled']['data'][Math.floor(Math.random() * 2)], configurable:true });
+    Object.defineProperty(navigator, "product", { value: data['Capabilities']['product']['data'][Math.floor(Math.random() * 15)], configurable:true });
 
     // MEDIA
-    Object.defineProperty(navigator, "mediaDevices", { get: () => ({
+    Object.defineProperty(navigator, "mediaDevices", { value: ({
         enumerateDevices: async function(){
             const randomDevice = data['Media']['mediaDevices']['data'][Math.floor(Math.random() * 15)];
             return [randomDevice];
         }
-    })});
+    }), configurable:true});
+
+    alert("New data has been generated");
 }
 
 async function getCurrentData(){
-    var useragent = navigator.userAgent;
-    var appVersion = navigator.appVersion;
-    var os = navigator.platform;
-    var language = navigator.languages;
-    var cpuCores = navigator.hardwareConcurrency;
-    var RAM = navigator.deviceMemory;
-    var touchPoints = navigator.maxTouchPoints;
+
+
     var mediaDevices = await getMediaDevices();
 
-    var output = "";
+    var outputMessage = document.createElement('div');
+    outputMessage.classList.add('outputMessage');
 
-    output += `\nUser Agent: ${useragent}\n`;
-    output += `\nApp Version: ${appVersion}\n`;
-    output += `\nOS: ${os}\n`;
-    output += `\nlanguages: ${language}\n`;
-    output += `\nCPU cores: ${cpuCores}\n`;
-    output += `\nRAM: ${RAM}\n`;
-    output += `\nTouch Points: ${touchPoints}\n`;
+    outputMessage.appendChild(genMessage([
+                                            'General', 
+                                            ['userAgent',navigator.userAgent],
+                                            ['appVersion', navigator.appVersion],
+                                            ['Operating System', navigator.platform],
+                                            ['Browser Language', navigator.language],
+                                            ['Preferred Languages', navigator.languages]
+                                        ]
+    ));
+
+
+    outputMessage.appendChild(genMessage([
+                                            'Device Information', 
+                                            ['CPU Cores',navigator.hardwareConcurrency],
+                                            ['RAM', navigator.deviceMemory],
+                                            ['TouchPoints', navigator.maxTouchPoints],
+                                        ]
+    ));
+
+
+    outputMessage.appendChild(genMessage([
+                                            'Network Information', 
+                                            ['OnLine',navigator.onLine],
+                                            ['EffectiveType', navigator.connection.effectiveType],
+                                            ['Downlink', navigator.connection.downlink],
+                                            ['rtt', navigator.connection.rtt]
+                                        ]
+    ));
+
+
+    outputMessage.appendChild(genMessage([
+                                            'Security', 
+                                            ['CookiesEnabled', navigator.cookieEnabled],
+                                            ['doNotTrack', navigator.doNotTrack]
+                                        ]
+    ));
+
+
+    outputMessage.appendChild(genMessage([
+                                            'Features', 
+                                            ['Webdriver', navigator.webdriver],
+                                            ['pdfViewerEnabled', navigator.pdfViewerEnabled],
+                                            ['product', navigator.product],
+                                        ]
+    ));
+
     
+    var temp = "";
     mediaDevices.forEach(device => {
-        output += `   - ${device.kind}: ${device.label || "Unknown"}\n`;
+        temp += `   - ${device.kind}: ${device.label || "Unknown"}\n`;
     });
 
 
-    alert(output);
+    outputMessage.appendChild(genMessage([
+                                            'Media', 
+                                            ['Devices', temp],
+                                        ]
+    ));
+
+
+    document.getElementById('output_window').appendChild(outputMessage);
 }
 
 async function getMediaDevices(){
@@ -381,5 +429,28 @@ async function getMediaDevices(){
     catch(error){
         alert(error);
     }
+}
+
+function genMessage(data){
+    var section = document.createElement('div');
+    section.classList.add('section');
+
+    var title = document.createElement('h3');
+    title.innerText = data[0];
+
+    section.appendChild(title);
+
+    for(i = 1; i < data.length; i++){
+        var elem1 = document.createElement('p');
+        elem1.innerHTML = `<i>${data[i][0]}</i>: ${data[i][1]}\n`;
+
+        section.appendChild(elem1);
+    }
+
+    return section;
+}
+
+function clearDisplay(){
+    document.getElementById('output_window').innerHTML = '';
 }
 
