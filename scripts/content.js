@@ -1,3 +1,4 @@
+// DATA VALUES SPOOFING
 const data = {
     General: {
         userAgent:{
@@ -287,4 +288,44 @@ const data = {
         }
     }
 }
+
+
+(function () {
+    const spoofedValues = {
+        userAgent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64zzå) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36",
+        platform: "Win32",
+        language: "en-US"
+    };
+
+    // Store values in sessionStorage if not already set
+    if (!sessionStorage.getItem("spoofedNavigator")) {
+        sessionStorage.setItem("spoofedNavigator", JSON.stringify(spoofedValues));
+    }
+
+    const storedValues = JSON.parse(sessionStorage.getItem("spoofedNavigator"));
+
+    // Redefine navigator properties using Object.defineProperty
+    function spoofProperty(property, value) {
+        Object.defineProperty(navigator, property, {
+            get: () => value,
+            configurable: true
+        });
+    }
+
+    spoofProperty("userAgent", storedValues.userAgent);
+    spoofProperty("platform", storedValues.platform);
+    spoofProperty("language", storedValues.language);
+
+    console.log("Navigator properties spoofed!");
+
+    console.log(navigator.userAgent)
+})();
+
+
+
+
+
+
+
+
 

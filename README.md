@@ -1,7 +1,6 @@
 # To Do
 
-
-- currently Geo location not changed -> block by default?
+adjust content script to use random data
 
 
 ## List all data a website is trying to collect

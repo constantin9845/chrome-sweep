@@ -309,7 +309,7 @@ document.getElementById("get_data").addEventListener("click", async () => {
 
 
 
-
+// Generating new data
 async function generateNewData(){
 
     // GENERAL
@@ -350,6 +350,7 @@ async function generateNewData(){
     alert("New data has been generated");
 }
 
+// Return current navigator data
 async function getCurrentData(){
 
 
@@ -453,4 +454,7 @@ function genMessage(data){
 function clearDisplay(){
     document.getElementById('output_window').innerHTML = '';
 }
+
+
+
 
