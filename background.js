@@ -1,4 +1,5 @@
-const data = {
+// DATA VALUES SPOOFING
+var data = {
     General: {
         userAgent:{
             data:["Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
@@ -208,7 +209,6 @@ const data = {
                 10      // Ultra-low RTT (high-speed fiber or enterprise-grade connections)
             ]
         }
-
     },
     Security: {
         cookieEnabled:{
@@ -217,7 +217,7 @@ const data = {
         doNotTrack:{
             data:[true, false]
         },
-        geoLocation:{
+        geolocation:{
             data:[
                 { latitude: 37.7749, longitude: -122.4194 },   // San Francisco, USA (valid location)
                 { latitude: 40.7128, longitude: -74.0060 },    // New York City, USA (valid location)
@@ -286,5 +286,72 @@ const data = {
             ]
         }
     }
-}
+};
+
+// get current values
+chrome.runtime.onMessage.addListener( async (request, sender, sendResponse) => {
+    if (request.action === "getSessionStorage") {
+
+        chrome.storage.session.get(["spoofedNavigator"])
+            .then((result)=>{
+                console.log(result.spoofedNavigator)
+                sendResponse(result.spoofedNavigator || {});
+            })
+            .catch((error) => {
+                console.error("Error retrieving session storage:", error);
+                sendResponse({});
+            });
+            return true;
+    }
+});
+
+
+// refresh values 
+chrome.runtime.onMessage.addListener( async (request, sender, sendResponse) => {
+    if (request.action === "setSessionStorage") {
+
+        const spoofedValues = {
+            // General
+            userAgent: data['General']['userAgent']['data'][Math.floor(Math.random() * 15)],
+            appVersion: data['General']['appVersion']['data'][Math.floor(Math.random() * 15)],
+            platform: data['General']['platform']['data'][Math.floor(Math.random() * 15)],
+            language: data['General']['language']['data'][Math.floor(Math.random() * 15)],
+            languages: data['General']['languages']['data'][Math.floor(Math.random() * 15)],
+    
+            // Device
+            hardwareConcurrency: data['Device']['hardwareConcurrency']['data'][Math.floor(Math.random() * 15)],
+            deviceMemory: data['Device']['deviceMemory']['data'][Math.floor(Math.random() * 15)],
+            maxTouchPoints: data['Device']['maxTouchPoints']['data'][Math.floor(Math.random() * 15)],
+    
+            // Network
+            onLine: data['Network']['onLine']['data'][Math.floor(Math.random() * 2)],
+            effectiveType: data['Network']['effectiveType']['data'][Math.floor(Math.random() * 15)],
+            downlink: data['Network']['downlink']['data'][Math.floor(Math.random() * 15)],
+            rtt: data['Network']['rtt']['data'][Math.floor(Math.random() * 15)],
+    
+            //Security
+            cookieEnabled: data['Security']['cookieEnabled']['data'][Math.floor(Math.random() * 2)],
+            doNotTrack: data['Security']['doNotTrack']['data'][Math.floor(Math.random() * 2)],
+            geolocation: data['Security']['geolocation']['data'][Math.floor(Math.random() * 15)],
+    
+            // Capabilities
+            webDriver: data['Capabilities']['webDriver']['data'][Math.floor(Math.random() * 2)],
+            pdfViewerEnabled: data['Capabilities']['pdfViewerEnabled']['data'][Math.floor(Math.random() * 2)],
+            product: data['Capabilities']['product']['data'][Math.floor(Math.random() * 15)]
+        };
+
+        try{
+
+            await chrome.storage.session.set({ spoofedNavigator: spoofedValues });
+    
+        }
+        catch(error){
+            console.log(error)
+            
+        }
+    }
+    return true;
+});
+
+
 
