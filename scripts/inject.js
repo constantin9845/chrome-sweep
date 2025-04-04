@@ -12,9 +12,7 @@
 
         const storedValues = event.data.value;
 
-        console.log(storedValues);
-
-        if (!storedValues || !storedValues.spoofedNavigator) return;
+        if (!storedValues && !storedValues.spoofedNavigator) return;
 
         function spoofProperty(property, value) {
 
@@ -38,17 +36,8 @@
         }
     
         console.log("Navigator properties spoofed!");
-    })
-
-    //const storedValues = await chrome.storage.local.get(['spoofedNavigator']);
-
-
+    });
 })();
-
-
-console.log(navigator.userAgent);
-console.log(navigator.connection.rtt);
-console.log(navigator.platform);
 
 
 

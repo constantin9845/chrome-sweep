@@ -1,12 +1,51 @@
 # To Do
 
-fix: Background gets data -> content.js does not receive (undefined)
+**still exposed data on navigator:**
+
+- window size
+- timezone
+- battery
+
+****
+
+**Language Detection**
+
+- Intl API
+- Accept-language header (server side, need proxy)
+
+****
+
+**OS detection**
+
+- CSS media queries (prefers-* queries)
+- Installed fonts (JS & Flash) -> disable in settings
+
+
+****
+
+**Hardware and performace detection**
+
+- WebGLRenderer -> need spoof
+- Web Audio API
+
+
+****
+
+**Network & Connections**
+
+- IP address -> block all requests (proxy)
+- WebRTC -> disable in settings
+
+
+****
+
+**Other**
+
+- Remove ActiveX, Flash
+- system uptime
+- mouse and touch vent analysis 
 
 
 ## List all data a website is trying to collect
-
-
-## Spoof / counter fingerprints collected with dynamic rendering (canvas,...)
-
 
 ## Let user set own navigator values

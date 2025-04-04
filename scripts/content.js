@@ -26,9 +26,6 @@ window.addEventListener("message", (event) => {
     if (event.source !== window || event.data.type !== "GET_STORAGE") return;
 
     chrome.runtime.sendMessage({ action: "getSessionStorage" }, (response) => {
-        console.log("*****************")
-        console.log(response);
-        console.log("*****************")
         window.postMessage({ type: "SESSION_STORAGE_RESPONSE", value: response }, "*");
     });
 });
