@@ -2,9 +2,9 @@
 
 **still exposed data on navigator:**
 
-- window size
-- timezone
-- battery
+- window size [50/50]
+- timezone 
+- canvas (deny canvas creation) [existing canvases blocked, block creation too?]
 
 ****
 
