@@ -1,6 +1,115 @@
 
 const WIDTH = [1920,1366,1280,1440,1600,1680,1024,2560,3840];
 const HEIGHT = [1080,768,1024,900,900,1050,768,1440,2160];
+const spoofedIntlConfigs = [
+    {
+      locale: "en-US",
+      timeZone: "America/New_York",
+      calendar: "gregory",
+      numberingSystem: "latn"
+    },
+    {
+      locale: "en-GB",
+      timeZone: "Europe/London",
+      calendar: "gregory",
+      numberingSystem: "latn"
+    },
+    {
+      locale: "fr-FR",
+      timeZone: "Europe/Paris",
+      calendar: "gregory",
+      numberingSystem: "latn"
+    },
+    {
+      locale: "de-DE",
+      timeZone: "Europe/Berlin",
+      calendar: "gregory",
+      numberingSystem: "latn"
+    },
+    {
+      locale: "es-ES",
+      timeZone: "Europe/Madrid",
+      calendar: "gregory",
+      numberingSystem: "latn"
+    },
+    {
+      locale: "ja-JP",
+      timeZone: "Asia/Tokyo",
+      calendar: "japanese",
+      numberingSystem: "latn"
+    },
+    {
+      locale: "zh-CN",
+      timeZone: "Asia/Shanghai",
+      calendar: "gregory",
+      numberingSystem: "hanidec"
+    },
+    {
+      locale: "ko-KR",
+      timeZone: "Asia/Seoul",
+      calendar: "gregory",
+      numberingSystem: "latn"
+    },
+    {
+      locale: "th-TH",
+      timeZone: "Asia/Bangkok",
+      calendar: "buddhist",
+      numberingSystem: "thai"
+    },
+    {
+      locale: "hi-IN",
+      timeZone: "Asia/Kolkata",
+      calendar: "gregory",
+      numberingSystem: "deva"
+    },
+    {
+      locale: "ar-SA",
+      timeZone: "Asia/Riyadh",
+      calendar: "islamic-umalqura",
+      numberingSystem: "arab"
+    },
+    {
+      locale: "he-IL",
+      timeZone: "Asia/Jerusalem",
+      calendar: "hebrew",
+      numberingSystem: "latn"
+    },
+    {
+      locale: "ru-RU",
+      timeZone: "Europe/Moscow",
+      calendar: "gregory",
+      numberingSystem: "latn"
+    },
+    {
+      locale: "pt-BR",
+      timeZone: "America/Sao_Paulo",
+      calendar: "gregory",
+      numberingSystem: "latn"
+    },
+    {
+      locale: "fa-IR",
+      timeZone: "Asia/Tehran",
+      calendar: "persian",
+      numberingSystem: "arabext"
+    }
+];
+const languageHeader = [
+    "en-US,en;q=0.9",
+    "en-GB,en;q=0.9",
+    "fr-FR,fr;q=0.9,en;q=0.8",
+    "de-DE,de;q=0.9,en;q=0.8",
+    "es-ES,es;q=0.9,en;q=0.8",
+    "ja-JP,ja;q=0.9,en-US;q=0.8,en;q=0.7",
+    "zh-CN,zh;q=0.9,en;q=0.8",
+    "ko-KR,ko;q=0.9,en;q=0.8",
+    "th-TH,th;q=0.9,en-US;q=0.8,en;q=0.7",
+    "hi-IN,hi;q=0.9,en-IN;q=0.8,en;q=0.7",
+    "ar-EG,ar;q=0.9,en-US;q=0.8,en;q=0.7",
+    "he-IL,he;q=0.9,en-US;q=0.8,en;q=0.7",
+    "ru-RU,ru;q=0.9,en;q=0.8",
+    "pt-BR,pt;q=0.9,en;q=0.8"
+];
+  
 
 (async function () {
 
@@ -66,9 +175,6 @@ const HEIGHT = [1080,768,1024,900,900,1050,768,1440,2160];
             return null; 
         };
 
-        // Spoof Intl api
-        spoofIntl();
-
 
         // remove all Iframes
         document.querySelectorAll('iframe').forEach(iframe => {
@@ -86,39 +192,59 @@ const HEIGHT = [1080,768,1024,900,900,1050,768,1440,2160];
               }
             }
         });
+        
+        try{
+            observer.observe(document.body, { childList: true, subtree: true });
+        }
+        catch(error){
+            console.log(error);
+        }
+
           
-        observer.observe(document.body, { childList: true, subtree: true });
+        // Spoof Intl api
+        const temp2 = Math.floor(Math.random()*15);
+        spoofIntl(temp2);
           
-          
-    
         console.log("Navigator properties spoofed!");
     });
 })();
 
 
-function spoofIntl(){
-    const fakeLocale = ["fr-FR", "de-DE", "ru-RU", "nl-NL"];
-    const fakeTimeZone = ["Europe/Paris"];
+function spoofIntl(temp){
 
-    const originalDateTimeFormat = Intl.DateTimeFormat;
+    const originalIntl = window.Intl;
 
-    Intl.DateTimeFormat = function(...args){
-        const instance = new originalDateTimeFormat(...args);
+    window.Intl = new Proxy(originalIntl, {
+    get(target, prop, receiver) {
+        if (prop === 'DateTimeFormat') {
+        return function(...args) {
+            const original = Reflect.apply(target[prop], target, args);
+            const modified = Object.create(original);
+            modified.resolvedOptions = () => ({
+            timeZone: spoofedIntlConfigs[temp]['timeZone'],
+            locale: spoofedIntlConfigs[temp]['locale'],
+            calendar: spoofedIntlConfigs[temp]['calendar'],
+            });
+            return modified;
+        };
+        }
 
-        return new Proxy(instance,{
-            get(target,prop){
-                if(prop === "resolvedoption"){
-                    return () => ({
-                        locale: fakeLocale[0],
-                        calendar: "greg",
-                        numberingSystem: "latn",
-                        timeZone: fakeTimeZone[0],
-                    });
-                }
-                return target[prop];
-            }
-        })
+        if (prop === 'NumberFormat') {
+        return function(...args) {
+            const original = Reflect.apply(target[prop], target, args);
+            const modified = Object.create(original);
+            modified.resolvedOptions = () => ({
+            locale: spoofedIntlConfigs[temp]['locale'],
+            numberingSystem: spoofedIntlConfigs[temp]['numberingSystem'],
+            });
+            return modified;
+        };
+        }
+
+        return Reflect.get(target, prop, receiver);
     }
+    });
+
 }
 
 

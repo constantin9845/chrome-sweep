@@ -137,5 +137,4 @@ function clearDisplay(){
     document.getElementById('output_window').innerHTML = '';
 }
 
-console.log('*********')
-console.log(navigator)
+
