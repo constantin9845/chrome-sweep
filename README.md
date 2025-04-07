@@ -4,6 +4,8 @@
 
 **Use persistent noise instead of direct spoof?**
 
+- block cache -> most data seems to be extracted from cache eventually upon retesting.
+
 **still exposed data on navigator:**
 
 - window size [50/50]
