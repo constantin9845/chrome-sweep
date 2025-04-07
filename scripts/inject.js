@@ -200,6 +200,9 @@ const languageHeader = [
             console.log(error);
         }
 
+        
+        spoofWebGL();
+
           
         // Spoof Intl api
         const temp2 = Math.floor(Math.random()*15);
@@ -247,6 +250,76 @@ function spoofIntl(temp){
 
 }
 
+function spoofWebGL(){
+    const original = HTMLCanvasElement.prototype.getContext;
+    Object.defineProperty(HTMLCanvasElement.prototype, 'getContext',{
+        value: function(type, ...args){
+            if(type === 'webgl' || type === 'webgl2' || type === "experimental-webgl"){
+                console.log("[Blocked] WebGL access");
+                return null;
+            }
+            return original.apply(this, [type, ...args]);
+        },
+        writable: false,
+        configurable: false 
+    });
+
+    if (window.OffscreenCanvas) {
+        const originalOffscreen = OffscreenCanvas.prototype.getContext;
+    
+        Object.defineProperty(OffscreenCanvas.prototype, 'getContext', {
+            value: function(type, ...args) {
+                if (type === "webgl" || type === "webgl2") {
+                    console.log("[Blocked] Offscreen WebGL access");
+                    return null;
+                }
+                return originalOffscreen.apply(this, [type, ...args]);
+            },
+            writable: false,
+            configurable: false
+        });
+    }
+
+
+    // WebGL Renderer
+    const spoofedVendor = "MarronInc.";
+    const spoofedRenderer = "Marron GPU";
+    const blockWebGLInfo = (context) => {
+        const originalGetParameter = context.getParameter;
+
+        context.getParameter = function(param) {
+            if (param === context.UNMASKED_VENDOR_WEBGL) {
+                return spoofedVendor;
+            }
+            if (param === context.UNMASKED_RENDERER_WEBGL) {
+                return spoofedRenderer;
+            }
+            return originalGetParameter.call(this, param);
+        };
+    };
+
+    // Patch regular canvas
+    const originalGetContext = HTMLCanvasElement.prototype.getContext;
+    HTMLCanvasElement.prototype.getContext = function(type, ...args) {
+        const ctx = originalGetContext.call(this, type, ...args);
+        if (type.includes("webgl") && ctx) {
+            blockWebGLInfo(ctx);
+        }
+        return ctx;
+    };
+
+    // Patch OffscreenCanvas
+    if (window.OffscreenCanvas) {
+        const originalOffscreenGetContext = OffscreenCanvas.prototype.getContext;
+        OffscreenCanvas.prototype.getContext = function(type, ...args) {
+            const ctx = originalOffscreenGetContext.call(this, type, ...args);
+            if (type.includes("webgl") && ctx) {
+                blockWebGLInfo(ctx);
+            }
+            return ctx;
+        };
+    }
+}
 
 
 

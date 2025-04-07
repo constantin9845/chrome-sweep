@@ -1,5 +1,9 @@
 # To Do
 
+****
+
+**Use persistent noise instead of direct spoof?**
+
 **still exposed data on navigator:**
 
 - window size [50/50]
@@ -10,14 +14,14 @@
 
 **Language Detection**
 
-- Intl API
-- Accept-language header (server side, need proxy)
+- Intl API [done]
+- Accept-language header (server side, need proxy) [X]
 
 ****
 
 **OS detection**
 
-- CSS media queries (prefers-* queries)
+- CSS media queries (prefers-* queries) 
 - Installed fonts (JS & Flash) -> disable in settings
 
 
@@ -25,8 +29,9 @@
 
 **Hardware and performace detection**
 
-- WebGLRenderer -> need spoof
-- Web Audio API
+- WebGLRenderer -> need spoof [partially done, need test on fresh device] 
+- Web Audio API  
+
 
 
 ****
@@ -49,3 +54,4 @@
 ## List all data a website is trying to collect
 
 ## Let user set own navigator values
+
